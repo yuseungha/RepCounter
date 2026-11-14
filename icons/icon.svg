@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- 앱 카드와 같은 파랑→초록 배경. 홈 화면 아이콘은 기기가 모서리를 깎으므로 꽉 찬 사각형으로 둔다 -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2bb3ff"/>
+      <stop offset="1" stop-color="#3ddc97"/>
+    </linearGradient>
+    <linearGradient id="plate" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1b3a4e"/>
+      <stop offset="1" stop-color="#0a1823"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#04131c" flood-opacity=".35"/>
+    </filter>
+  </defs>
+
+  <rect width="512" height="512" fill="url(#bg)"/>
+
+  <!-- 덤벨: 가로로 그린 뒤 가운데를 기준으로 키우고 기울인다.
+       가장 먼 모서리가 중심에서 약 178px라 Android 원형 마스크(반지름 205px) 안에 여유 있게 들어간다 -->
+  <g id="dumbbell" filter="url(#shadow)" transform="rotate(-35 256 256) translate(256 256) scale(1.12) translate(-256 -256)">
+    <!-- 손잡이 -->
+    <rect x="186" y="244" width="140" height="24" rx="12" fill="#0f2433"/>
+    <rect x="216" y="244" width="80" height="24" fill="#16334a"/>
+    <!-- 안쪽 고정 링 -->
+    <rect x="180" y="226" width="14" height="60" rx="5" fill="#0f2433"/>
+    <rect x="318" y="226" width="14" height="60" rx="5" fill="#0f2433"/>
+    <!-- 큰 원판 -->
+    <rect x="144" y="170" width="40" height="172" rx="14" fill="url(#plate)"/>
+    <rect x="328" y="170" width="40" height="172" rx="14" fill="url(#plate)"/>
+    <!-- 작은 원판 -->
+    <rect x="114" y="194" width="32" height="124" rx="12" fill="url(#plate)"/>
+    <rect x="366" y="194" width="32" height="124" rx="12" fill="url(#plate)"/>
+    <!-- 끝 마개 -->
+    <rect x="100" y="238" width="18" height="36" rx="7" fill="#0f2433"/>
+    <rect x="394" y="238" width="18" height="36" rx="7" fill="#0f2433"/>
+    <!-- 원판 위쪽 빛 반사 -->
+    <rect x="152" y="180" width="8" height="70" rx="4" fill="#ffffff" opacity=".18"/>
+    <rect x="336" y="180" width="8" height="70" rx="4" fill="#ffffff" opacity=".18"/>
+    <rect x="120" y="202" width="6" height="46" rx="3" fill="#ffffff" opacity=".14"/>
+    <rect x="372" y="202" width="6" height="46" rx="3" fill="#ffffff" opacity=".14"/>
+  </g>
+</svg>

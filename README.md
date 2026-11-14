@@ -45,10 +45,28 @@ GitHub Pages로 배포. PC가 꺼져 있어도 열림. 처음 한 번 홈 화면
 - 진행 링과 세트 점, 완료 시 체크 표시와 색종이, 휴대폰 진동(지원 기기만)
 - 기기의 "동작 줄이기" 설정이 켜져 있으면 움직임과 색종이를 끔
 
+## 아이콘
+
+덤벨 아이콘. 원본은 `icons/icon.svg` 하나이고, 홈 화면용 PNG(180·192·512px)는 이 파일로 만든 결과물.
+SVG를 고친 뒤 아래 명령으로 PNG를 다시 만듦(Windows의 Microsoft Edge와 Pillow 필요).
+
+```bash
+python 10_RepCounter/tools/make_icons.py
+```
+
+| 파일 | 쓰는 곳 |
+|---|---|
+| `icons/icon.svg` | 브라우저 탭 아이콘, PNG 원본 |
+| `icons/apple-touch-icon.png` (180) | iPhone 홈 화면 |
+| `icons/icon-192.png`, `icon-512.png` | Android 홈 화면(`manifest.webmanifest`) |
+
+홈 화면에서 열면 주소창 없이 앱처럼 전체 화면으로 열림.
+이미 홈 화면에 추가했다면 아이콘이 바로 바뀌지 않을 수 있음. 지우고 다시 추가.
+
 ## 검사
 
 ```bash
-node --test 10_RepCounter/tests/core.test.js
+node --test 10_RepCounter/tests/core.test.js 10_RepCounter/tests/icons.test.js
 ```
 
 ## 입력 보정 규칙
