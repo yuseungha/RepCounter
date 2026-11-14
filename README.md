@@ -9,13 +9,23 @@
 
 ## 실행
 
+### 휴대폰
+
+주소: https://yuseungha.github.io/RepCounter/
+
+GitHub Pages로 배포. PC가 꺼져 있어도 열림. 처음 한 번 홈 화면에 추가하면 앱처럼 실행 가능.
+
+- iPhone(Safari): 공유 → 홈 화면에 추가
+- Android(Chrome): ⋮ → 홈 화면에 추가
+
+열 때 인터넷 연결 필요. 진행 상황은 휴대폰 브라우저에 저장되어 앱을 닫아도 유지.
+`main`에 올리면 1~2분 뒤 같은 주소에 반영.
+
+### PC
+
 설치 없음. `index.html`을 브라우저로 열면 됨.
 
-휴대폰에서 쓰려면 이 폴더를 휴대폰으로 옮겨 브라우저로 열거나, 같은 Wi-Fi에서 PC로 띄운 주소에 접속.
-
-```bash
-python -m http.server 8765 --directory 10_RepCounter
-```
+참고: 파일을 휴대폰에 복사해 여는 방식은 휴대폰 브라우저가 로컬 HTML·스크립트를 막는 경우가 많아 권장하지 않음.
 
 ## 구조
 
