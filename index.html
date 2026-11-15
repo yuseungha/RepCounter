@@ -16,68 +16,110 @@
 </head>
 <body>
   <main class="app">
-    <!-- 설정 화면 -->
-    <section id="setup" class="screen" aria-labelledby="setup-title">
-      <h1 id="setup-title" class="title">횟수 카운터</h1>
-      <form id="setup-form" class="setup-form" novalidate>
-        <label class="field">
-          <span class="field-label">목표 횟수</span>
-          <span class="stepper">
-            <button type="button" class="stepper-btn" data-target="goal" data-delta="-10" aria-label="목표 10 줄이기">−</button>
-            <input id="goal" name="goal" type="number" inputmode="numeric" min="1" max="9999" value="50">
-            <button type="button" class="stepper-btn" data-target="goal" data-delta="10" aria-label="목표 10 늘리기">+</button>
-          </span>
-        </label>
-        <label class="field">
-          <span class="field-label">카드당 횟수</span>
-          <span class="stepper">
-            <button type="button" class="stepper-btn" data-target="step" data-delta="-1" aria-label="카드당 횟수 1 줄이기">−</button>
-            <input id="step" name="step" type="number" inputmode="numeric" min="1" max="9999" value="10">
-            <button type="button" class="stepper-btn" data-target="step" data-delta="1" aria-label="카드당 횟수 1 늘리기">+</button>
-          </span>
-        </label>
-        <p id="setup-preview" class="preview" aria-live="polite"></p>
-        <button type="submit" class="primary">시작</button>
-      </form>
+    <!-- 1. 운동 목록: 저장한 운동 중 오늘 할 것을 체크하고 시작 -->
+    <section id="library" class="screen" aria-labelledby="library-title">
+      <h1 id="library-title" class="title">오늘 할 운동</h1>
+      <ul id="exercise-list" class="exercise-list"></ul>
+      <p id="empty" class="empty" hidden>저장한 운동이 없어요.<br>아래에서 운동을 추가해 보세요.</p>
+      <button id="add-exercise" class="add-btn" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>운동 추가
+      </button>
+      <div class="spacer"></div>
+      <button id="start" class="primary" type="button">운동 시작</button>
     </section>
 
-    <!-- 세는 화면 -->
-    <section id="counter" class="screen" hidden aria-label="횟수 세기">
-      <header class="counter-head">
-        <div class="ring" aria-hidden="true">
-          <svg viewBox="0 0 120 120">
-            <circle class="ring-track" cx="60" cy="60" r="52"></circle>
-            <circle id="ring-bar" class="ring-bar" cx="60" cy="60" r="52"></circle>
-          </svg>
-          <div class="ring-text">
-            <span id="done" class="done">0</span>
-            <span class="goal-line">/ <span id="goal-text">50</span></span>
-          </div>
-        </div>
-        <ol id="dots" class="dots" aria-hidden="true"></ol>
-        <p id="sets-text" class="sets-text" aria-live="polite"></p>
-      </header>
-
-      <div class="stage">
-        <button id="card" class="card" type="button">
-          <span class="card-label">이번 세트</span>
-          <span id="card-num" class="card-num">10</span>
-          <span class="card-hint">끝나면 누르기</span>
-        </button>
-        <div id="finish" class="finish" hidden>
-          <span class="finish-mark" aria-hidden="true">✓</span>
-          <span class="finish-title">완료</span>
-          <span id="finish-sub" class="finish-sub"></span>
-        </div>
-        <div id="floats" class="floats" aria-hidden="true"></div>
-      </div>
-
-      <footer class="actions">
+    <!-- 2. 운동 중: 옆으로 밀어 운동 이동, 아래 탭으로 위치 표시 -->
+    <section id="workout" class="screen workout" hidden aria-label="운동 중">
+      <div id="pager" class="pager" aria-roledescription="운동 넘기기"></div>
+      <div class="actions">
         <button id="undo" class="ghost" type="button">되돌리기</button>
-        <button id="reset" class="ghost" type="button">새로 시작</button>
-      </footer>
+        <button id="stop" class="ghost" type="button">그만하기</button>
+      </div>
+      <nav id="tabs" class="tabs" aria-label="운동 목록"></nav>
+    </section>
+
+    <!-- 3. 전부 완료 -->
+    <section id="summary" class="screen summary" hidden aria-labelledby="summary-title">
+      <div class="summary-head">
+        <span class="finish-mark" aria-hidden="true">✓</span>
+        <h1 id="summary-title" class="summary-title">오늘 운동 끝</h1>
+        <p id="summary-total" class="summary-total"></p>
+      </div>
+      <ul id="summary-list" class="summary-list"></ul>
+      <div class="spacer"></div>
+      <button id="summary-done" class="primary" type="button">목록으로</button>
+      <button id="summary-back" class="text-btn" type="button">운동 화면으로 돌아가기</button>
     </section>
   </main>
+
+  <!-- 운동 추가·편집 창 -->
+  <dialog id="editor" class="editor" aria-labelledby="editor-title">
+    <form id="editor-form" novalidate>
+      <h2 id="editor-title" class="editor-title">운동 추가</h2>
+      <label class="field">
+        <span class="field-label">이름</span>
+        <input id="ex-name" class="text-input" type="text" maxlength="20" placeholder="푸시업" autocomplete="off">
+      </label>
+      <label class="field">
+        <span class="field-label">목표 횟수</span>
+        <span class="stepper">
+          <button type="button" class="stepper-btn" data-target="ex-goal" data-delta="-10" aria-label="목표 10 줄이기">−</button>
+          <input id="ex-goal" type="number" inputmode="numeric" min="1" max="9999" value="100">
+          <button type="button" class="stepper-btn" data-target="ex-goal" data-delta="10" aria-label="목표 10 늘리기">+</button>
+        </span>
+      </label>
+      <label class="field">
+        <span class="field-label">세트 수 (몇 번에 나눌지)</span>
+        <span class="stepper">
+          <button type="button" class="stepper-btn" data-target="ex-sets" data-delta="-1" aria-label="세트 1 줄이기">−</button>
+          <input id="ex-sets" type="number" inputmode="numeric" min="1" max="50" value="4">
+          <button type="button" class="stepper-btn" data-target="ex-sets" data-delta="1" aria-label="세트 1 늘리기">+</button>
+        </span>
+      </label>
+      <p id="ex-preview" class="preview" aria-live="polite"></p>
+
+      <div id="edit-tools" class="edit-tools">
+        <button id="ex-up" type="button" class="ghost small">위로</button>
+        <button id="ex-down" type="button" class="ghost small">아래로</button>
+        <button id="ex-delete" type="button" class="ghost small danger">삭제</button>
+      </div>
+
+      <div class="editor-actions">
+        <button id="ex-cancel" type="button" class="ghost">취소</button>
+        <button type="submit" class="primary">저장</button>
+      </div>
+    </form>
+  </dialog>
+
+  <template id="page-template">
+    <article class="page">
+      <h2 class="page-name"></h2>
+      <div class="ring" aria-hidden="true">
+        <svg viewBox="0 0 120 120">
+          <circle class="ring-track" cx="60" cy="60" r="52"></circle>
+          <circle class="ring-bar" cx="60" cy="60" r="52"></circle>
+        </svg>
+        <div class="ring-text">
+          <span class="done">0</span>
+          <span class="goal-line">/ <span class="goal-text"></span></span>
+        </div>
+      </div>
+      <ol class="dots" aria-hidden="true"></ol>
+      <p class="sets-text" aria-live="polite"></p>
+      <div class="stage">
+        <button class="card" type="button">
+          <span class="card-label">이번 세트</span>
+          <span class="card-num"></span>
+          <span class="card-hint">끝나면 누르기</span>
+        </button>
+        <div class="finish" hidden>
+          <span class="finish-mark" aria-hidden="true">✓</span>
+          <span class="finish-title">완료</span>
+        </div>
+        <div class="floats" aria-hidden="true"></div>
+      </div>
+    </article>
+  </template>
 
   <canvas id="confetti" class="confetti" aria-hidden="true"></canvas>
   <script src="core.js"></script>
